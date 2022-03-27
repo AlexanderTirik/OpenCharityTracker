@@ -1,8 +1,29 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from "next/app";
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "../theme";
+import { Provider } from "react-redux";
+import { store } from "../app/store";
+import { IntlProvider } from "react-intl";
+import { useEffect, useState } from "react";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
-}
+const MyApp = ({ Component, pageProps }: AppProps) => {
+  const [language, setLanguage] = useState("en");
+  
+  useEffect(() => {
+    if (navigator.language) {
+      setLanguage(navigator.language);
+    }
+  }, []);
 
-export default MyApp
+  return (
+    <IntlProvider locale={language}>
+      <ChakraProvider theme={theme}>
+        <Provider store={store}>
+          <Component {...pageProps} />
+        </Provider>
+      </ChakraProvider>
+    </IntlProvider>
+  );
+};
+
+export default MyApp;
