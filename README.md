@@ -3,7 +3,9 @@
 ### Install packages
 
 ```bash
+cd frontend
 yarn install
+cd ..
 cd contract
 yarn install
 ```
@@ -11,7 +13,8 @@ yarn install
 ### Run frontend
 
 ```bash
-yarn dev
+cd frontend
+yarn run
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

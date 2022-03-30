@@ -6,7 +6,7 @@ const theme: ThemeConfig = extendTheme({
 		heading: 'Gilroy, sans-serif'
 	},
 	initialColorMode: 'dark',
-	useSystemColorMode: true
+	useSystemColorMode: true,
 })
 
 export default theme
