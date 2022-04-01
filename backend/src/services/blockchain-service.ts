@@ -4,12 +4,13 @@ import {
   Cluster,
   ConfirmOptions,
   PublicKey,
+  Keypair,
 } from '@solana/web3.js';
 import { config } from 'src/config';
 import { fromJsonToWallet, hashString } from 'src/helpers/blockchain-helper';
 import { Program, Provider } from '@project-serum/anchor';
 import kp from 'src/keypair.json';
-import idl from 'src/idl.json';
+import fs from 'fs';
 
 class BlockchainService {
   private connection: Connection;
@@ -24,11 +25,22 @@ class BlockchainService {
       fromJsonToWallet(kp),
       'processed' as ConfirmOptions,
     );
-    this.program = new Program(
-      idl,
-      new PublicKey(idl.metadata.address),
-      this.provider,
+    const programId = new PublicKey(config.programId);
+    const idl = JSON.parse(
+      fs.readFileSync('src/opencharitytracker.json', 'utf8'),
     );
+    this.program = new Program(idl, programId, this.provider);
+  }
+
+  async createAccount(): Promise<string> {
+    const account = await Keypair.generate();
+    await this.program.rpc.startOpenCharityTracker({
+      accounts: {
+        baseAccount: account.publicKey,
+        user: this.provider.wallet.publicKey,
+      },
+    });
+    return JSON.stringify(account);
   }
 
   async sendTransactionToBlockchain(account, amount): Promise<void> {
