@@ -6,6 +6,7 @@ import {
   PublicKey,
   Keypair,
 } from '@solana/web3.js';
+import * as anchor from '@project-serum/anchor';
 import { config } from 'src/config';
 import { fromJsonToWallet, hashString } from 'src/helpers/blockchain-helper';
 import { Program, Provider } from '@project-serum/anchor';
@@ -13,7 +14,6 @@ import kp from 'src/keypair.json';
 import fs from 'fs';
 
 class BlockchainService {
-  private connection: Connection;
   private program: Program;
   private provider: Provider;
   constructor() {
@@ -34,31 +34,36 @@ class BlockchainService {
 
   async createAccount(): Promise<string> {
     const account = await Keypair.generate();
-    await this.program.rpc.startOpenCharityTracker({
-      accounts: {
+    await this.program.methods
+      .startOpenCharityTracker()
+      .accounts({
         baseAccount: account.publicKey,
         user: this.provider.wallet.publicKey,
-      },
-    });
+      })
+      .signers([account])
+      .rpc();
     return JSON.stringify(account);
   }
 
   async sendTransactionToBlockchain(account, amount): Promise<void> {
     const lastHash = await this.getLastHash(account);
     const hash = hashString(`${lastHash}${amount}`);
-    await this.program.rpc.addTransaction(amount, hash, {
-      accounts: {
+    await this.program.methods
+      .addTransaction(new anchor.BN(amount), hash)
+      .accounts({
         baseAccount: account.publicKey,
         user: this.provider.wallet.publicKey,
-      },
-    });
+      })
+      .rpc();
   }
   async getLastHash(account): Promise<string> {
     const programAccount = await this.program.account.baseAccount.fetch(
       account.publicKey,
     );
     const { transactions } = programAccount;
-    return transactions[transactions.length - 1].hash;
+    return transactions.length
+      ? transactions[transactions.length - 1].hash
+      : '';
   }
 }
 
