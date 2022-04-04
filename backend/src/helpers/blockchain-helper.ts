@@ -1,13 +1,12 @@
-import { Wallet } from '@project-serum/anchor';
 import { Keypair } from '@solana/web3.js';
-import crypto from 'crypto';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const crypto = require('crypto');
 
-export const fromJsonToWallet = (keypair) => {
+export const fromJsonToKeypair = (keypair) => {
   const arr = Object.values(keypair._keypair.secretKey) as number[];
   const secret = new Uint8Array(arr);
   const account = Keypair.fromSecretKey(secret);
-  const wallet = new Wallet(account);
-  return wallet;
+  return account;
 };
 
 export const hashString = (string) =>

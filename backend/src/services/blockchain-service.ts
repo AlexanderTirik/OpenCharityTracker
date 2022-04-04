@@ -4,14 +4,15 @@ import {
   Cluster,
   ConfirmOptions,
   PublicKey,
-  Keypair,
+  SystemProgram,
 } from '@solana/web3.js';
 import * as anchor from '@project-serum/anchor';
 import { config } from 'src/config';
-import { fromJsonToWallet, hashString } from 'src/helpers/blockchain-helper';
+import { fromJsonToKeypair, hashString } from 'src/helpers/blockchain-helper';
 import { Program, Provider } from '@project-serum/anchor';
-import kp from 'src/keypair.json';
-import fs from 'fs';
+import { getLocalJSON } from 'src/helpers/file-helper';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require('fs');
 
 class BlockchainService {
   private program: Program;
@@ -22,34 +23,36 @@ class BlockchainService {
     );
     this.provider = new Provider(
       connection,
-      fromJsonToWallet(kp),
+      new anchor.Wallet(fromJsonToKeypair(getLocalJSON('keypair'))),
       'processed' as ConfirmOptions,
     );
+
     const programId = new PublicKey(config.programId);
-    const idl = JSON.parse(
-      fs.readFileSync('src/opencharitytracker.json', 'utf8'),
-    );
+    const idl = getLocalJSON('opencharitytracker');
     this.program = new Program(idl, programId, this.provider);
   }
 
   async createAccount(): Promise<string> {
-    const account = await Keypair.generate();
+    const account = anchor.web3.Keypair.generate();
     await this.program.methods
       .startOpenCharityTracker()
       .accounts({
         baseAccount: account.publicKey,
         user: this.provider.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
       })
       .signers([account])
       .rpc();
+    // Test account
+    fs.writeFileSync('./src/account.json', JSON.stringify(account));
     return JSON.stringify(account);
   }
 
-  async sendTransactionToBlockchain(account, amount): Promise<void> {
+  async sendTransactionToBlockchain(account, amount: number): Promise<void> {
     const lastHash = await this.getLastHash(account);
     const hash = hashString(`${lastHash}${amount}`);
     await this.program.methods
-      .addTransaction(new anchor.BN(amount), hash)
+      .addTransaction(amount, hash)
       .accounts({
         baseAccount: account.publicKey,
         user: this.provider.wallet.publicKey,
