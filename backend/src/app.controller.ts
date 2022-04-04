@@ -10,4 +10,12 @@ export class AppController {
   getHello(): ITransaction[] {
     return this.appService.getTransactions();
   }
+  @Get('/create')
+  getCreate(): Promise<string> {
+    return this.appService.createAccount();
+  }
+  @Get('/send')
+  getSend(): Promise<void> {
+    return this.appService.sendTransactionToBlockchain();
+  }
 }
