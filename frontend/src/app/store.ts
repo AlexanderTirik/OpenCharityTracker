@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { api } from '../services/api'
+import solanaSlice from '../slices/solanaSlice'
 
 
 export const store = configureStore({
   reducer: {
-    // posts: postsReducer,
-    // comments: commentsReducer,
-    // users: usersReducer,
+    [api.reducerPath]: api.reducer,
+    solana: solanaSlice
   },
 })
 
