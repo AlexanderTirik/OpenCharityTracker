@@ -43,7 +43,7 @@ class BlockchainService {
       })
       .signers([account])
       .rpc();
-    // Test account
+    // Test account need only public key
     fs.writeFileSync('./src/account.json', JSON.stringify(account));
     return JSON.stringify(account);
   }
@@ -52,7 +52,7 @@ class BlockchainService {
     const lastHash = await this.getLastHash(account);
     const hash = hashString(`${lastHash}${amount}`);
     await this.program.methods
-      .addTransaction(amount, hash)
+      .addTransaction(`${amount}`, hash)
       .accounts({
         baseAccount: account.publicKey,
         user: this.provider.wallet.publicKey,

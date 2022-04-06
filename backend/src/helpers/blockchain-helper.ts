@@ -1,6 +1,5 @@
 import { Keypair } from '@solana/web3.js';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const crypto = require('crypto');
+import * as crypto from 'crypto';
 
 export const fromJsonToKeypair = (keypair) => {
   const arr = Object.values(keypair._keypair.secretKey) as number[];

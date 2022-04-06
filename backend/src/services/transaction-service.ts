@@ -8,7 +8,7 @@ class TransactionService {
   constructor() {
     this.transactions = [];
   }
-  async addMonobankTransaction(transaction: ITransaction): void {
+  async addMonobankTransaction(transaction: ITransaction): Promise<void> {
     const isDuplicate = this.transactions.find(
       ({ id }) => id === transaction.id,
     );
