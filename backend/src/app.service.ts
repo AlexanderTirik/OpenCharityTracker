@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { transactionService } from './services/transaction-service';
 import { ITransaction } from './services/ITransaction';
 import { blockchainService } from './services/blockchain-service';
