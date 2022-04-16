@@ -9,5 +9,5 @@ export class BlockchainEntity {
   key: object;
 
   @Column('text', { name: 'blockchain_description', nullable: true })
-  description: number;
+  description: string;
 }

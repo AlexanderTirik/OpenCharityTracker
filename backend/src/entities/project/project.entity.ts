@@ -33,6 +33,7 @@ export class ProjectEntity {
   @OneToMany(() => CardEntity, (card) => card.project, {
     cascade: ['update', 'remove', 'insert'],
     eager: true,
+    primary: true
   })
   cards: CardEntity[];
 }
