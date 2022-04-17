@@ -18,13 +18,11 @@ class BlockchainService {
   private program: Program;
   private provider: Provider;
   constructor() {
-    const connection = new Connection(
-      clusterApiUrl(config.blockchainNet as Cluster),
-    );
+    const connection = new Connection(clusterApiUrl(config.blockchainNet));
     this.provider = new Provider(
       connection,
       new anchor.Wallet(fromJsonToKeypair(getLocalJSON('keypair'))),
-      'processed' as ConfirmOptions,
+      { preflightCommitment: 'processed' },
     );
 
     const programId = new PublicKey(config.programId);

@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Program, Provider, Idl, Wallet } from "@project-serum/anchor";
+import { Program, Provider, Idl } from "@project-serum/anchor";
 import {
   Connection,
   clusterApiUrl,
   Cluster,
   ConfirmOptions,
   PublicKey,
-  Keypair,
 } from "@solana/web3.js";
 import { env } from "../config/env";
 import idl from "../opencharitytracker.json";
@@ -14,6 +13,7 @@ import idl from "../opencharitytracker.json";
 interface SolanaState {
   provider: Provider;
   program: Program;
+  connection: Connection;
 }
 
 const connection = new Connection(clusterApiUrl(env.blockchainNet as Cluster));
@@ -32,6 +32,7 @@ const program = new Program(idl as Idl, programId, provider);
 const initialState: SolanaState = {
   provider,
   program,
+  connection
 };
 
 export const solanaSlice = createSlice({
