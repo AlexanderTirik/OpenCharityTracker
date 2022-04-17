@@ -1,6 +1,6 @@
 import { Body, Controller, Post, HttpCode } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
-import { IMonoBankTransaction } from '../services/IMonoBankTransaction';
+import { IMonoBankTransaction } from '../services/transactionService/IMonoBankTransaction';
 
 @Controller('webhook')
 export class WebhookController {
@@ -8,10 +8,10 @@ export class WebhookController {
 
   @Post('monobank')
   @HttpCode(200)
-  processMonobankTransaction(
+  async processMonobankTransaction(
     @Body() transaction: IMonoBankTransaction,
-  ): string {
-    this.webhookService.processMonobankTransaction(transaction);
+  ): Promise<string> {
+    await this.webhookService.processMonobankTransaction(transaction);
     return 'ok';
   }
 }
