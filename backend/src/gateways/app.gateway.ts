@@ -7,7 +7,10 @@ import {
 import { Server, Socket } from 'socket.io';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Events, SocketEvents } from '../common/constants';
-import { ITransactionInitiatedEvent } from '../interfaces/events';
+import {
+  ITransactionFinalizedEvent,
+  ITransactionInitiatedEvent,
+} from '../interfaces/events';
 
 @WebSocketGateway({ cors: true })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -33,19 +36,32 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   public handleTransactionInitiatedEvent(
     payload: ITransactionInitiatedEvent,
   ): void {
-    console.log(payload);
     const clientData = Object.entries(this.clientProjectHashMap).find(
       ([clientId, projectId]) => projectId === payload.projectId,
     );
 
-    console.log(clientData);
+    if (clientData) {
+      const [clientId] = clientData;
+
+      this.server.to(clientId).emit(SocketEvents.TRANSACTION_INITIATED, {
+        amount: payload.amount,
+        id: payload.id,
+      });
+    }
+  }
+
+  @OnEvent(Events.TRANSACTION_FINALIZED)
+  public handleTransactionFinalizedEvent(
+    payload: ITransactionFinalizedEvent,
+  ): void {
+    const clientData = Object.entries(this.clientProjectHashMap).find(
+      ([clientId, projectId]) => projectId === payload.projectId,
+    );
 
     if (clientData) {
       const [clientId] = clientData;
 
-      this.server
-        .to(clientId)
-        .emit(SocketEvents.TRANSACTION_INITIATED, payload.amount);
+      this.server.to(clientId).emit(SocketEvents.TRANSACTION_INITIATED, payload.id);
     }
   }
 }

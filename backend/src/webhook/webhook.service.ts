@@ -43,6 +43,7 @@ export class WebhookService {
       const transactionInitiatedEvent: ITransactionInitiatedEvent = {
         amount: transactionData.amount,
         projectId: relatedProject.id,
+        id: transactionData.id,
       };
       this.eventEmitter.emit(
         Events.TRANSACTION_INITIATED,
