@@ -5,3 +5,11 @@ export const Base = {
 export const Services = {
   TRANSACTION: 'TRANSACTION',
 };
+
+export const Events = {
+  TRANSACTION_INITIATED: 'TRANSACTION_INITIATED',
+};
+
+export const SocketEvents = {
+  TRANSACTION_INITIATED: 'TRANSACTION_INITIATED',
+};

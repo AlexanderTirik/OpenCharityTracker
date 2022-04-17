@@ -1,9 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IMonoBankTransaction } from '../services/transactionService/IMonoBankTransaction';
 import { config } from '../config';
-import { Base, Services } from '../common/constants';
+import { Base, Events, Services } from '../common/constants';
 import { IGlobalDBContext } from '../common/IGlobalDBContext';
 import { ITransactionService } from '../services/transactionService/ITransactionService';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ITransactionInitiatedEvent } from '../interfaces/events';
 
 @Injectable()
 export class WebhookService {
@@ -12,6 +14,7 @@ export class WebhookService {
     protected _dbContext: IGlobalDBContext,
     @Inject(Services.TRANSACTION)
     protected _transactionService: ITransactionService,
+    private eventEmitter: EventEmitter2,
   ) {}
   async processMonobankTransaction(
     transaction: IMonoBankTransaction,
@@ -23,6 +26,11 @@ export class WebhookService {
         await this._dbContext.projectRepository.getProjectByMonobankAccountId(
           transaction.data.account,
         );
+      if (!relatedProject) {
+        console.log('missed transaction', JSON.stringify(transaction));
+        return;
+      }
+
       const item = transaction.data.statementItem;
       const transactionData = {
         id: item.id,
@@ -31,6 +39,16 @@ export class WebhookService {
         amount: item.amount,
         comment: item.comment || '',
       };
+
+      const transactionInitiatedEvent: ITransactionInitiatedEvent = {
+        amount: transactionData.amount,
+        projectId: relatedProject.id,
+      };
+      this.eventEmitter.emit(
+        Events.TRANSACTION_INITIATED,
+        transactionInitiatedEvent,
+      );
+
       this._transactionService.addMonobankTransaction({
         transaction: transactionData,
         project: relatedProject,

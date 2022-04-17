@@ -40,3 +40,6 @@ target
 ./backend/node_modules
 ./backend/.idea
 ./backend/dist
+
+#next
+/.next/
