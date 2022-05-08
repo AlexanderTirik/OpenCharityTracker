@@ -1,24 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IRequisites } from "../models/IRequisites";
 import { ITransaction } from "../models/ITransaction";
-
-interface ICards {
-  mono: string;
-}
 
 interface ProjectState {
   transactions: ITransaction[];
-  cards: ICards;
+  requisites: IRequisites;
   name: string;
   description: string;
   amount: number;
+  goal: number;
 }
 
 const initialState: ProjectState = {
   transactions: [],
-  cards: { mono: "" },
+  requisites: { mono: "" },
   name: "",
   description: "",
   amount: 0,
+  goal: 0,
 };
 
 export const projectSlice = createSlice({

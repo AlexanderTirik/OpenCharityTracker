@@ -5,13 +5,10 @@ export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: env.api }),
   endpoints: (builder) => ({
-    create: builder.query({
-      query: () => `/create`,
-    }),
-    send: builder.query({
-      query: () => `/send`,
+    getInfo: builder.query({
+      query: () => `/project-info`,
     }),
   }),
 })
 
-export const { useLazySendQuery, useLazyCreateQuery } = api
+export const { useGetInfoQuery } = api
