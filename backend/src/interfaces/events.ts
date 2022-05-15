@@ -7,4 +7,5 @@ export interface ITransactionInitiatedEvent {
 export interface ITransactionFinalizedEvent {
   projectId: string;
   id: string;
+  transactionSignature: string;
 }

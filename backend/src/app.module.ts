@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DATABASE } from './config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppGateway } from './gateways/app.gateway';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(DATABASE),
     WebhookModule,
     EventEmitterModule.forRoot(),
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],

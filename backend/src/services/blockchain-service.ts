@@ -46,10 +46,10 @@ class BlockchainService {
     return JSON.stringify(account);
   }
 
-  async sendTransactionToBlockchain(account, amount: number): Promise<void> {
+  async sendTransactionToBlockchain(account, amount: number): Promise<string> {
     const lastHash = await this.getLastHash(account);
     const hash = hashString(`${lastHash}${amount}`);
-    await this.program.methods
+    return this.program.methods
       .addTransaction(`${amount}`, hash)
       .accounts({
         baseAccount: account.publicKey,

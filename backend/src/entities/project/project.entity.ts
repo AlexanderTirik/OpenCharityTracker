@@ -33,7 +33,13 @@ export class ProjectEntity {
   @OneToMany(() => CardEntity, (card) => card.project, {
     cascade: ['update', 'remove', 'insert'],
     eager: true,
-    primary: true
+    primary: true,
   })
   cards: CardEntity[];
+
+  @Column('numeric', { name: 'goal', default: 0 })
+  goal: number;
+
+  @Column('numeric', { name: 'collectedAmount', default: 0 })
+  collectedAmount: number;
 }
