@@ -4,9 +4,10 @@ import { Box, BoxProps, Progress } from "@chakra-ui/react";
   interface IProps {
     amount: string | number;
     isLoading?: boolean;
+    id: string;
   }
   
-  const Transaction = ({ amount, isLoading = false, ...rest }: IProps & BoxProps) => {
+  const Transaction = ({ amount, id, isLoading = false, ...rest }: IProps & BoxProps) => {
 
     return (
       <Box {...transactionStyle} {...{borderBottom: !isLoading ? "5px solid #EEEEEE" : ''}} {...rest}>
@@ -14,7 +15,7 @@ import { Box, BoxProps, Progress } from "@chakra-ui/react";
             <Box fontWeight="bold" fontSize="xl">
               {amount} грн
             </Box>
-            <Box color="#72BBFF" cursor="pointer">
+            <Box as="a" href={`https://solscan.io/tx/${id}`} color="#72BBFF" cursor="pointer">
             Переглянути транзакцію
             </Box>
           </Box>

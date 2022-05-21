@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../app/store";
 import { IRequisites } from "../models/IRequisites";
 import { ITransaction } from "../models/ITransaction";
 
@@ -12,7 +13,7 @@ interface ProjectState {
 }
 
 const initialState: ProjectState = {
-  transactions: [{id: '1', amount:'500', isLoading: true}, {id: '1', amount:'300'},{id: '1', amount:'200'},{id: '1', amount:'100'}, {id: '1', amount:'400'}],
+  transactions: [],
   requisites: { mono: "" },
   name: "",
   description: "",
@@ -24,6 +25,11 @@ export const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
+    initProject: (state, { payload }) => {
+      const { name, cards, description, goal, amount } = payload
+      const mono = cards[0].number;
+      return { ...state, name, description, goal, amount, requisites: { mono } };
+    },
     addTransaction: (state, { payload }) => {
       const isTransactionExist = state.transactions.find(
         (tsn) => tsn.id === payload.id
@@ -47,4 +53,5 @@ export const projectSlice = createSlice({
 });
 
 export default projectSlice.reducer;
-export const { addTransaction, loadTransaction } = projectSlice.actions;
+export const selectProject = (state: RootState) => state.project
+export const { addTransaction, loadTransaction, initProject } = projectSlice.actions;

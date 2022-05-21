@@ -1,4 +1,5 @@
-import { background, Box, BoxProps } from "@chakra-ui/react";
+import { Box, BoxProps } from "@chakra-ui/react";
+import { formatCard } from "../../helpers/moneyHelper";
   interface IProps {
     address: string;
     label: string;
@@ -8,7 +9,7 @@ import { background, Box, BoxProps } from "@chakra-ui/react";
 
     return (
       <Box {...requisiteStyle} {...rest}>
-          <Box fontSize="3xl" fontWeight="700">{address}</Box><Box {...labelStyle}>{label}</Box>
+          <Box fontSize="3xl" fontWeight="700">{formatCard(address)}</Box><Box {...labelStyle}>{label}</Box>
       </Box>
     );
   };

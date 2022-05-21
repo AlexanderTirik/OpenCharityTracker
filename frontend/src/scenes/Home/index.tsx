@@ -4,45 +4,39 @@ import ProjectInfo from "../../components/ProjectInfo";
 import Requisite from "../../components/Requisite";
 import Transaction from "../../components/Transaction";
 import { useAppSelector } from "../../hooks/redux";
+import { useGetInfoQuery } from "../../services/api";
+import { selectProject } from "../../slices/projectSlice";
 
 const Home = () => {
-  // runApi();
-  // const {
-  //   data
-  // } = useGetInfoQuery("any");
+  const {
+    isError
+  } = useGetInfoQuery('f3e4c107-225e-42f6-a20c-8db51c1213ae');
+  
+  const { transactions, name, description, goal, amount, requisites } = useAppSelector(selectProject);
 
- const  data = {
-    name: "Допомога для Кості Цимбала",
-    description: ` Ми збираємо гроші на нові труси для Кості Цимбала, йому терміново потрібні нові, бо старі він вмудрився обісрати.
-    Це дуже довга історія про те як він обісрав свої труси, але якщо коротко, він випив хуйового вина во Франціі, після чого, коли він пішов у музей, він обісрався від хуйового вина.
-    Люди, не будьте байдужими, кожна гривня буде корисна, бо грошей на нові труси у Кості немає, мінімальна ціна на труси у Франціі - 100 євро, тому ми відкрили збір на 3000 гривень, що є 100 євро.`,
-    amount: 1000,
-    goal: 3000,
-    requisites: { mono: "1488 1488 1488 1488" },
-  };
+  if (isError) return <div>An error has occurred!</div>
 
-  const { transactions } = useAppSelector((state) => state.project);
   return (
     <Box width="80%" margin="0 auto">
       <Flex direction="row" justify="space-around" mb="30px">
         <Flex direction="column">
           <ProjectInfo
-            name={data.name}
-            description={data.description}
-            goal={data.goal}
+            name={name}
+            description={description}
+            goal={goal}
             mb="30px"
             mr="5"
           />
           <Box ml="16px">
             <Heading size="md" mb={2}>Реквізити: </Heading>
-            <Requisite address={data.requisites.mono} label="MONO" />
+            <Requisite address={requisites.mono} label="MONO" />
           </Box>
         </Flex>
-        <Chart balance={data.amount} goal={data.goal} />
+        <Chart balance={amount} goal={goal} />
       </Flex>
       <Flex direction="column" ml="16px">
       <Heading size="md" mb={2}>Останні транзакції: </Heading>
-        {transactions.map((tsn) => (
+        {(transactions || []).map((tsn: any) => (
           <Transaction {...tsn} marginBottom="5px" />
         ))}
       </Flex>
