@@ -12,7 +12,7 @@ interface ProjectState {
 }
 
 const initialState: ProjectState = {
-  transactions: [],
+  transactions: [{id: '1', amount:'500', isLoading: true}, {id: '1', amount:'300'},{id: '1', amount:'200'},{id: '1', amount:'100'}, {id: '1', amount:'400'}],
   requisites: { mono: "" },
   name: "",
   description: "",

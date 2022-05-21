@@ -1,6 +1,7 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex, Heading } from "@chakra-ui/react";
 import Chart from "../../components/Chart";
 import ProjectInfo from "../../components/ProjectInfo";
+import Requisite from "../../components/Requisite";
 import Transaction from "../../components/Transaction";
 import { useAppSelector } from "../../hooks/redux";
 
@@ -22,22 +23,30 @@ const Home = () => {
 
   const { transactions } = useAppSelector((state) => state.project);
   return (
-    <div>
-      <Flex direction="row" justify="space-around">
-        <ProjectInfo
-          name={data.name}
-          description={data.description}
-          requisites={data.requisites}
-          goal={data.goal}
-        />
+    <Box width="80%" margin="0 auto">
+      <Flex direction="row" justify="space-around" mb="30px">
+        <Flex direction="column">
+          <ProjectInfo
+            name={data.name}
+            description={data.description}
+            goal={data.goal}
+            mb="30px"
+            mr="5"
+          />
+          <Box ml="16px">
+            <Heading size="md" mb={2}>Реквізити: </Heading>
+            <Requisite address={data.requisites.mono} label="MONO" />
+          </Box>
+        </Flex>
         <Chart balance={data.amount} goal={data.goal} />
       </Flex>
-      <Flex>
+      <Flex direction="column" ml="16px">
+      <Heading size="md" mb={2}>Останні транзакції: </Heading>
         {transactions.map((tsn) => (
-          <Transaction {...tsn} />
+          <Transaction {...tsn} marginBottom="5px" />
         ))}
       </Flex>
-    </div>
+    </Box>
   );
 };
 

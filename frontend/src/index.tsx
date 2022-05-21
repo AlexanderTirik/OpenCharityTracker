@@ -1,3 +1,4 @@
+import "@fontsource/rubik";
 import React from 'react';
 import theme from './theme';
 import { ChakraProvider } from '@chakra-ui/react';

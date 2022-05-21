@@ -1,43 +1,32 @@
-import { Badge, Box, Heading } from "@chakra-ui/react";
-import { IRequisites } from "../../models/IRequisites";
+import { Box, BoxProps, Heading } from "@chakra-ui/react";
+import { separateByThousands } from "../../helpers/moneyHelper";
 
 interface IProps {
   name: string;
-  requisites: IRequisites;
   description: string;
   goal: number | string;
 }
 
-const ProjectInfo = ({ name, requisites, description, goal }: IProps) => {
+const ProjectInfo = ({ name, description, goal, ...rest }: IProps & BoxProps) => {
   return (
-    <Box {...projectInfoStyle}>
-        <Heading size="xl" mb="2">{name}</Heading>
-        <Box {...dataBlockStyle}>
-        <Heading size="md">Реквізити</Heading>
-        <Box><Badge colorScheme="blackAlpha">Mono</Badge>: {requisites.mono}</Box>
+    <Box {...projectInfoStyle} {...rest}>
+      <Box background="white" padding="28px" borderRadius="16px" height="100%">
+        <Heading size="lg" mb="3">{name}</Heading>
+        <Box fontSize="lg" mb="3"><b>Ціль:</b> {separateByThousands(goal)} гривень</Box>
+        <Box fontSize="lg">
+            <b>Опис: </b>
+            <br />
+            {description}
         </Box>
-        <Box {...dataBlockStyle}>
-        <Heading size="md">Ціль</Heading>
-        <Box>{goal} гривень</Box>
-        </Box>
-        <Box {...dataBlockStyle}>
-        <Heading size="md">
-            Деталі
-        </Heading>
-        <Box>
-           {description}
-            </Box></Box>
+      </Box>
     </Box>
   );
 };
 
-const dataBlockStyle = {
-  mb: 2
-}
-
 const projectInfoStyle = {
-    padding: '16px',
-    border: '1px solid black',
+    background: '#EEEEEE',
+    border: '5px solid #EEEEEE',
+    borderBottom: '33px solid #EEEEEE',
     borderRadius: '16px'
 }
 

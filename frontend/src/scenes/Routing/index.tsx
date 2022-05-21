@@ -7,7 +7,6 @@ export default function Routing() {
     <Router>
       <Routes>
         <Route path={RoutesEnum.Home} element={<Home />} />
-        {/* <Route path={RoutesEnum.Statistics} element={<Statistics />} /> */}
       </Routes>
     </Router>
   );
