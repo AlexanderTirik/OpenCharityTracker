@@ -61,7 +61,10 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (clientData) {
       const [clientId] = clientData;
 
-      this.server.to(clientId).emit(SocketEvents.TRANSACTION_INITIATED, payload.id);
+      this.server.to(clientId).emit(SocketEvents.TRANSACTION_FINALIZED, {
+        id: payload.id,
+        transactionSignature: payload.transactionSignature,
+      });
     }
   }
 }

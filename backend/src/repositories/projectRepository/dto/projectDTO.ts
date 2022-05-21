@@ -7,4 +7,6 @@ export interface ProjectDTO {
   description: string | null;
   blockchain: BlockchainDTO;
   cards: CardDTO[];
+  collectedAmount: number;
+  goal: number;
 }

@@ -19,14 +19,17 @@ export class TransactionService implements ITransactionService {
     project: ProjectDTO;
   }): Promise<void> {
     try {
-      // TODO: write to AWS S3
-      await blockchainService.sendTransactionToBlockchain(
-        fromJsonToKeypair(project.blockchain.key),
-        transaction.amount,
-      );
+      const transactionSignature =
+        await blockchainService.sendTransactionToBlockchain(
+          fromJsonToKeypair(project.blockchain.key),
+          transaction.amount,
+        );
+
+      console.log(transactionSignature);
       const eventData: ITransactionFinalizedEvent = {
         projectId: project.id,
         id: transaction.id,
+        transactionSignature,
       };
 
       this.eventEmitter.emit(Events.TRANSACTION_FINALIZED, eventData);

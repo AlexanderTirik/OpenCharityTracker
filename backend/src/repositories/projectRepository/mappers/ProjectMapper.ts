@@ -9,6 +9,8 @@ export class ProjectMapper {
       id: project.projectId,
       name: project.name,
       description: project.description,
+      goal: Number(project.goal),
+      collectedAmount: Number(project.collectedAmount),
       cards: project.cards.map(CardMapper.toDTO),
       blockchain: BlockchainMapper.toDTO(project.blockchain),
     };
