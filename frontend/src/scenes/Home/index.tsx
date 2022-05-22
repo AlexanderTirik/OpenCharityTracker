@@ -1,4 +1,4 @@
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, CircularProgress, Flex, Heading } from "@chakra-ui/react";
 import Chart from "../../components/Chart";
 import ProjectInfo from "../../components/ProjectInfo";
 import Requisite from "../../components/Requisite";
@@ -9,12 +9,17 @@ import { selectProject } from "../../slices/projectSlice";
 
 const Home = () => {
   const {
-    isError
+    isError, isLoading
   } = useGetInfoQuery('f3e4c107-225e-42f6-a20c-8db51c1213ae');
   
   const { transactions, name, description, goal, amount, requisites } = useAppSelector(selectProject);
 
   if (isError) return <div>An error has occurred!</div>
+  if (isLoading) return (
+    <Flex justifyContent="center" alignItems="center" mt={5}>
+      <CircularProgress size={320} isIndeterminate color="#72BBFF" />
+    </Flex>
+  )
 
   return (
     <Box width="80%" margin="0 auto">
