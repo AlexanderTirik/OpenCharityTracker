@@ -37,7 +37,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     payload: ITransactionInitiatedEvent,
   ): void {
     const clientData = Object.entries(this.clientProjectHashMap).find(
-      ([clientId, projectId]) => projectId === payload.projectId,
+      ([_clientId, projectId]) => projectId === payload.projectId,
     );
 
     if (clientData) {
@@ -55,7 +55,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     payload: ITransactionFinalizedEvent,
   ): void {
     const clientData = Object.entries(this.clientProjectHashMap).find(
-      ([clientId, projectId]) => projectId === payload.projectId,
+      ([_clientId, projectId]) => projectId === payload.projectId,
     );
 
     if (clientData) {

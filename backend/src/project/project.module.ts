@@ -1,17 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ProjectController } from './project.controller';
 import { ProjectService } from './project.service';
-import { Base } from '../common/constants';
-import { GlobalDBContext } from '../infrastracture/GlobalDBContext';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProjectRepository } from '../repositories/projectRepository/projectRepository';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([ProjectRepository])],
   controllers: [ProjectController],
-  providers: [
-    ProjectService,
-    {
-      provide: Base.GLOBAL_DB_CONTEXT,
-      useClass: GlobalDBContext,
-    },
-  ],
+  providers: [ProjectService],
 })
 export class ProjectModule {}

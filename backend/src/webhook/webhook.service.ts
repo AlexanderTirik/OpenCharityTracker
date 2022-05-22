@@ -1,17 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IMonoBankTransaction } from '../services/transactionService/IMonoBankTransaction';
 import { config } from '../config';
-import { Base, Events, Services } from '../common/constants';
-import { IGlobalDBContext } from '../common/IGlobalDBContext';
+import { Events, Services } from '../common/constants';
 import { ITransactionService } from '../services/transactionService/ITransactionService';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ITransactionInitiatedEvent } from '../interfaces/events';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ProjectRepository } from '../repositories/projectRepository/projectRepository';
 
 @Injectable()
 export class WebhookService {
   constructor(
-    @Inject(Base.GLOBAL_DB_CONTEXT)
-    protected _dbContext: IGlobalDBContext,
+    @InjectRepository(ProjectRepository)
+    private projectRepository: ProjectRepository,
     @Inject(Services.TRANSACTION)
     protected _transactionService: ITransactionService,
     private eventEmitter: EventEmitter2,
@@ -23,7 +24,7 @@ export class WebhookService {
     const isRefillTransaction = transaction.data.statementItem.amount > 0;
     if (isAccountTrackable && isRefillTransaction) {
       const relatedProject =
-        await this._dbContext.projectRepository.getProjectByMonobankAccountId(
+        await this.projectRepository.getProjectByMonobankAccountId(
           transaction.data.account,
         );
       if (!relatedProject) {

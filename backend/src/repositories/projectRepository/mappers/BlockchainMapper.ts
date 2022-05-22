@@ -10,7 +10,7 @@ export class BlockchainMapper {
     };
   }
 
-  public static toEntity(blockchainDTO: BlockchainDTO): CardEntity {
+  public static toEntity(_blockchainDTO: BlockchainDTO): CardEntity {
     throw new Error('To be implemented');
   }
 }

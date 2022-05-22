@@ -11,7 +11,7 @@ export class CardMapper {
     };
   }
 
-  public static toEntity(cardDTO: CardDTO): CardEntity {
+  public static toEntity(_cardDTO: CardDTO): CardEntity {
     throw new Error('To be implemented');
   }
 }

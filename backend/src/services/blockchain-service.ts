@@ -1,8 +1,6 @@
 import {
   Connection,
   clusterApiUrl,
-  Cluster,
-  ConfirmOptions,
   PublicKey,
   SystemProgram,
 } from '@solana/web3.js';

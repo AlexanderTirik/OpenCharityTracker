@@ -24,5 +24,8 @@ export const DATABASE: PostgresConnectionOptions = {
   entities: [__dirname + '/**/*.entity.{ts,js}'],
   synchronize: false,
   // logger: 'debug',
-  logging: true,
+  logging: false,
+  extra: {
+    max: 3,
+  },
 };

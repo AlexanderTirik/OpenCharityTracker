@@ -16,7 +16,7 @@ export class ProjectMapper {
     };
   }
 
-  public static toEntity(project: ProjectDTO): ProjectEntity {
+  public static toEntity(_project: ProjectDTO): ProjectEntity {
     throw new Error('To be implemented');
   }
 }

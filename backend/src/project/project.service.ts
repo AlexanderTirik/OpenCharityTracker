@@ -1,16 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Base } from '../common/constants';
-import { IGlobalDBContext } from '../common/IGlobalDBContext';
+import { Injectable } from '@nestjs/common';
 import { ProjectByIdDTO } from './DTOs/projectByIdDTO';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ProjectRepository } from '../repositories/projectRepository/projectRepository';
 
 @Injectable()
 export class ProjectService {
   constructor(
-    @Inject(Base.GLOBAL_DB_CONTEXT)
-    protected _dbContext: IGlobalDBContext,
+    @InjectRepository(ProjectRepository)
+    protected projectRepository: ProjectRepository,
   ) {}
   async getProject(id: string): Promise<ProjectByIdDTO> {
-    const project = await this._dbContext.projectRepository.getProject(id);
+    const project = await this.projectRepository.getProject(id);
 
     return {
       id: project.id,
